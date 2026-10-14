@@ -5,11 +5,11 @@
 我用python编写了复刻版本
 
 ## 作者
-成昊天
+Toki Mizuki
 
 ## 联系方式
 - Email: dboycht@qq.com
-- [Github](https://github.com/chenghaotian): @chenghaotian
+- [Github](https://github.com/dboycht): @dboycht
 
 ## 更新日志
 ### v1.0
