@@ -1,0 +1,16 @@
+# 本地文档：只留本地，永不入库
+DEVELOPMENT.md
+ERROR.md
+HANDOVER.md
+ACCEPTANCE.md
+PENDING_DELETE.md
+logs/
+_scratch/
+.tmp/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# macOS
+.DS_Store
