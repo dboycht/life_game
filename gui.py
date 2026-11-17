@@ -57,6 +57,8 @@ class LifeGUI:
         tk.Scale(top, from_=10, to=500, orient=tk.HORIZONTAL, showvalue=False,
                  variable=self.interval_ms, length=110).pack(side=tk.LEFT)
 
+        tk.Button(top, text="关于", width=6, command=self.show_about).pack(side=tk.RIGHT)
+
         bottom = tk.Frame(self.root)
         bottom.pack(side=tk.BOTTOM, fill=tk.X, padx=6, pady=4)
         tk.Label(bottom, text="横:").pack(side=tk.LEFT)
@@ -201,6 +203,19 @@ class LifeGUI:
         self.grid = engine.Grid(w, h)
         self.generation = 0
         self.draw_all()
+
+    def show_about(self) -> None:
+        messagebox.showinfo(
+            "关于 康威生命游戏",
+            f"康威生命游戏 life_game {VERSION_TAG}\n"
+            "\n"
+            "标准康威规则（B3/S23），棋盘为环面\n"
+            "仅用 Python 标准库，零第三方依赖\n"
+            "\n"
+            "作者: Toki Mizuki\n"
+            "Email: dboycht@qq.com\n"
+            "Github: github.com/dboycht/life_game",
+            parent=self.root)
 
     def on_close(self) -> None:
         self.running = False
