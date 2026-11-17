@@ -34,6 +34,7 @@ class LifeGUI:
         self.grid = engine.Grid(DEFAULT_W, DEFAULT_H)
         self._build_ui()
         self.draw_all()
+        self._fit_window()
 
     # ---- 界面搭建 ------------------------------------------------------
 
@@ -100,6 +101,16 @@ class LifeGUI:
             self.canvas.bind(seq, self._on_erase)
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+
+    # ---- 窗口自适应 ------------------------------------------------------
+
+    def _fit_window(self) -> None:
+        """画布视口设为棋盘像素尺寸，窗口交给 WM 按内容自适应——
+        打开/应用尺寸后整幅棋盘恰好可见；超出屏幕由系统钳制，滚动条兜底。"""
+        self.canvas.configure(width=self.grid.width * CELL,
+                              height=self.grid.height * CELL)
+        self.root.update_idletasks()
+        self.root.geometry("")
 
     # ---- 绘制 ----------------------------------------------------------
 
@@ -212,6 +223,7 @@ class LifeGUI:
         self.grid = engine.Grid(w, h)
         self.generation = 0
         self.draw_all()
+        self._fit_window()
 
     # ---- 速度输入（输入框与滑块双向同步） ---------------------------------
 
