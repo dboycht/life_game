@@ -54,8 +54,17 @@ class LifeGUI:
         tk.Button(top, text="放置", command=self.place_preset).pack(side=tk.LEFT, padx=(2, 0))
 
         tk.Label(top, text="速度(ms):").pack(side=tk.LEFT, padx=(12, 2))
-        tk.Scale(top, from_=10, to=500, orient=tk.HORIZONTAL, showvalue=False,
-                 variable=self.interval_ms, length=110).pack(side=tk.LEFT)
+        self.speed_var = tk.StringVar(value=str(self.interval_ms.get()))
+        self.ent_speed = tk.Entry(top, width=6, textvariable=self.speed_var,
+                                  justify=tk.CENTER)
+        self.ent_speed.pack(side=tk.LEFT)
+        self.ent_speed.bind("<Return>", self._apply_speed)
+        self.ent_speed.bind("<FocusOut>", self._apply_speed)
+        self.scale = tk.Scale(top, from_=10, to=500, orient=tk.HORIZONTAL,
+                              showvalue=False, command=self._on_scale, length=110)
+        self.scale.pack(side=tk.LEFT)
+        self.scale.set(self.interval_ms.get())
+        self.interval_ms.trace_add("write", self._sync_speed_text)
 
         tk.Button(top, text="关于", width=6, command=self.show_about).pack(side=tk.RIGHT)
 
@@ -203,6 +212,38 @@ class LifeGUI:
         self.grid = engine.Grid(w, h)
         self.generation = 0
         self.draw_all()
+
+    # ---- 速度输入（输入框与滑块双向同步） ---------------------------------
+
+    def _sync_speed_text(self, *_args) -> None:
+        """滑块或程序侧改了刷新间隔，输入框跟着显示同值。"""
+        self.speed_var.set(str(self.interval_ms.get()))
+
+    def _on_scale(self, raw: str) -> None:
+        """滑块拖动 → 更新刷新间隔（trace 再同步输入框）。"""
+        self.interval_ms.set(int(float(raw)))
+
+    def _apply_speed(self, _event=None) -> None:
+        """输入框回车/失焦时生效；非法输入标红提示后回落当前值。"""
+        try:
+            value = int(self.speed_var.get().strip())
+        except ValueError:
+            value = None
+        if value is None or not 1 <= value <= 10000:
+            self.ent_speed.config(fg="#ff6b6b")
+            self.root.after(700, self._restore_speed_color)
+            self.speed_var.set(str(self.interval_ms.get()))
+            return
+        # 先动滑块（command 回调会写一次钳位值），后设真实间隔，最终以输入为准；
+        # 超出滑块范围时滑块停在端点，实际间隔不受限。
+        self.scale.set(value)
+        self.interval_ms.set(value)
+        self.speed_var.set(str(value))
+        self.update_status()
+
+    def _restore_speed_color(self) -> None:
+        if self.ent_speed.winfo_exists():
+            self.ent_speed.config(fg=COLOR_TEXT)
 
     def show_about(self) -> None:
         messagebox.showinfo(
