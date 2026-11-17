@@ -50,10 +50,11 @@ _待发布（以 Release 为准）_
 - 5.版本号单一来源 version.py；署名统一为 Toki Mizuki
 - 6.新增「关于」对话框（版本、规则、作者与联系方式）
 - 7.速度支持输入框直填（1~10000ms），与滑块双向同步
+- 8.新增 macOS .app 打包（自包含，zip 约 9.2MB）；Windows exe 需 Windows 环境
 #### 使用说明
 - **推荐** `python3 main.py` 直接开窗口
 - 终端版 `python3 cli.py`；引擎自测 `python3 selftest.py`
-- 编译版 exe/zip 随 Release 提供（见附件）
+- 编译版 macOS .app（zip）随 Release 提供（见附件）；首次打开被 Gatekeeper 拦时，右键 → 打开
 
 ### v1.0
 #### 更新日期
